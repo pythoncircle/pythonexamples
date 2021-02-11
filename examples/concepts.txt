@@ -1,0 +1,15 @@
+
+print
+{
+prints value on to console
+be cautious of indentation
+}
+
+
+variable
+
+syntax
+input
+prompt
+IPO cycle
+bugs
