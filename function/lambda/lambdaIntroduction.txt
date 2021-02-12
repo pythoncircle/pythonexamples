@@ -1,0 +1,19 @@
+         program is popularly known as code.
+         programmers are popularly known as coder
+         script is popular term for program in python world
+
+# lambda function
+""" 
+	lambda is a keyword out of 33 keywords
+	lambda is a shorthand notation 
+	lambda is an anonymous function
+	It is a nameless function
+	anonymous means without a name
+	what we can do with a lambda function can also be done with a 
+	normal function   
+	There is no return statement in case of lambda function
+	parameters are not enclosed in parentheses
+	It can have only single expression in its body
+	It can have multiple arguements 
+
+"""
