@@ -1,0 +1,1 @@
+print('nis' in 'Pythonista')
