@@ -1,0 +1,46 @@
+
+Computer stores or processes all the data in the form of numbers
+digital computer holds all the information in terms of 0 and 1
+
+encoding scheme gives a number to a letter or symbol, based on the number specific 
+signal is generated in computer
+
+
+ASCII stands for 
+American standard code for information interchange
+ASCII  has 256 characters
+ASCII is old encoding scheme
+
+
+Unicode does not have full form
+Unicode has much wider range than ASCII
+even much more than 65535
+Unicode can contain letters of all the languages 
+spoken in the world
+
+ie we can display the characters  of any language like hindi,
+punjabi,japanese, bengali,russian,german etc through Unicode
+this is not possible through ASCII
+
+Unicode is recent encoding scheme
+
+unicode is a superset of ASCII.
+unicode = ascii plus lots of many more characters
+
+===============================
+Escape sequence
+===========================
+characters starting with back slash (\) are known as 
+escape sequence. Escape sequence is known as escape sequence
+because we escape from their normal meaning. the get the effect 
+of esacpe sequence. There are few escape sequences. some of them 
+are as follows-
+
+\n= new line character
+\t = tab character
+\b= back space
+
+
+
+
+
