@@ -1,0 +1,154 @@
+case insensitive match
+
+The first metacharacters we’ll look at are [ and ]. They’re used for specifying a character class, which is a set of characters that you wish to match
+
+Metacharacters are not active inside classes
+
+You can match the characters not listed within the class by complementing the set. This is indicated by including a '^' as the first character of the class. For example, [^5] will match any character except '5'. If the caret appears elsewhere in a character class, it does not have special meaning. For example: [5^] will match either a '5' or a '^'.
+
+Perhaps the most important metacharacter is the backslash, \. As in Python string literals, the backslash can be followed by various characters to signal various special sequences. It’s also used to escape all the metacharacters so you can still match them in patterns; for example, if you need to match a [ or \, you can precede them with a backslash to remove their special meaning: \[ or \\
+
+Some of the special sequences beginning with '\' represent predefined sets of characters that are often useful, such as the set of digits, the set of letters, or the set of anything that isn’t whitespace
+
+\d
+
+    Matches any decimal digit; this is equivalent to the class [0-9].
+\D
+
+    Matches any non-digit character; this is equivalent to the class [^0-9].
+\s
+
+    Matches any whitespace character; this is equivalent to the class [ \t\n\r\f\v].
+\S
+
+    Matches any non-whitespace character; this is equivalent to the class [^ \t\n\r\f\v].
+\w
+
+    Matches any alphanumeric character; this is equivalent to the class [a-zA-Z0-9_].
+\W
+
+    Matches any non-alphanumeric character; this is equivalent to the class [^a-zA-Z0-9_]
+
+The final metacharacter in this section is .. It matches anything except a newline character, and there’s an alternate mode (re.DOTALL) where it will match even a newline. . is often used where you want to match “any character”.
+
+For example, ca*t will match 'ct' (0 'a' characters), 'cat' (1 'a'), 'caaat' (3 'a' characters), and so forth.
+
+Repetitions such as * are greedy; when repeating a RE, the matching engine will try to repeat it as many times as possible. If later portions of the pattern don’t match, the matching engine will then back up and try again with fewer repetitions.
+
++ requires at least one occurrence. To use a similar example, ca+t will match 'cat' (1 'a'), 'caaat' (3 'a's), but won’t match 'ct'.
+
+?, matches either once or zero times; you can think of it as marking something as being optional. For example, home-?brew matches either 'homebrew' or 'home-brew'.
+
+a/{1,3}b will match 'a/b', 'a//b', and 'a///b'. It won’t match 'ab', which has no slashes, or 'a////b', which has four.
+
+p = re.compile('ab*', re.IGNORECASE)
+
+In short, to match a literal backslash, one has to write '\\\\' as the RE string, because the regular expression must be \\, and each backslash must be expressed as \\ inside a regular Python string literal. In REs that feature backslashes repeatedly, this leads to lots of repeated backslashes and makes the resulting strings difficult to understand.
+
+The solution is to use Python’s raw string notation for regular expressions; backslashes are not handled in any special way in a string literal prefixed with 'r', so r"\n" is a two-character string containing '\' and 'n', while "\n" is a one-character string containing a newline. Regular expressions will often be written in Python code using this raw string notation.
+
+group() returns the substring that was matched by the RE. start() and end() return the starting and ending index of the match. span() returns both start and end indexes in a single tuple
+
+findall() has to create the entire list before it can be returned as the result. The finditer() method returns a sequence of match object instances as an iterator:
+>>>
+
+
+ p = re.compile(r'\d+')
+
+>>> iterator = p.finditer('12 drummers drumming, 11 ... 10 ...')
+>>> iterator  
+<callable_iterator object at 0x...>
+>>> for match in iterator:
+...     print(match.span())
+...
+(0, 2)
+(22, 24)
+(29, 31)
+
+=======
+
+
+Module-Level Functions
+
+You don’t have to create a pattern object and call its methods; the re module also provides top-level functions called match(), search(), findall(), sub(), and so forth. These functions take the same arguments as the corresponding pattern method with the RE string added as the first argument, and still return either None or a match object instance.
+>>>
+
+>>> print(re.match(r'From\s+', 'Fromage amk'))
+None
+>>> re.match(r'From\s+', 'From amk Thu May 14 19:12:10 1998')  
+<re.Match object; span=(0, 5), match='From '>
+
+Under the hood, these functions simply create a pattern object for you and call the appropriate method on it. They also store the compiled object in a cache, so future calls using the same RE won’t need to parse the pattern again and again.
+
+Should you use these module-level functions, or should you get the pattern and call its methods yourself? If you’re accessing a regex within a loop, pre-compiling it will save a few function calls. Outside of loops, there’s not much difference thanks to the internal cache.
+
+=====
+|
+
+    Alternation, or the “or” operator. If A and B are regular expressions, A|B will match any string that matches either A or B. | has very low precedence in order to make it work reasonably when you’re alternating multi-character strings. Crow|Servo will match either 'Crow' or 'Servo', not 'Cro', a 'w' or an 'S', and 'ervo'.
+
+    To match a literal '|', use \|, or enclose it inside a character class, as in [|].
+===
+\b
+
+    Word boundary. This is a zero-width assertion that matches only at the beginning or end of a word. A word is defined as a sequence of alphanumeric characters, so the end of a word is indicated by whitespace or a non-alphanumeric character.
+
+    The following example matches class only when it’s a complete word; it won’t match when it’s contained inside another word.
+=====
+There are two subtleties you should remember when using this special sequence. First, this is the worst collision between Python’s string literals and regular expression sequences. In Python’s string literals, \b is the backspace character, ASCII value 8. If you’re not using raw strings, then Python will convert the \b to a backspace, and your RE won’t match as you expect it to. The following example looks the same as our previous RE, but omits the 'r' in front of the RE string.
+====
+
+Groups indicated with '(', ')' also capture the starting and ending index of the text that they match; this can be retrieved by passing an argument to group(), start(), end(), and span(). Groups are numbered starting with 0. Group 0 is always present; it’s the whole RE, so match object methods all have group 0 as their default argument. Later we’ll see how to express groups that don’t capture the span of text that they match.
+>>>
+
+>>> p = re.compile('(a)b')
+>>> m = p.match('ab')
+>>> m.group()
+'ab'
+>>> m.group(0)
+'ab'
+
+====
+Subgroups are numbered from left to right, from 1 upward. Groups can be nested; to determine the number, just count the opening parenthesis characters, going from left to right.
+>>>
+
+>>> p = re.compile('(a(b)c)d')
+>>> m = p.match('abcd')
+>>> m.group(0)
+'abcd'
+>>> m.group(1)
+'abc'
+>>> m.group(2)
+'b'
+
+======
+
+group() can be passed multiple group numbers at a time, in which case it will return a tuple containing the corresponding values for those groups.
+>>>
+
+>>> m.group(2,1,2)
+('b', 'abc', 'b')
+
+The groups() method returns a tuple containing the strings for all the subgroups, from 1 up to however many there are.
+>>>
+
+>>> m.groups()
+('abc', 'b')
+
+Backreferences in a pattern allow you to specify that the contents of an earlier capturing group must also be found at the current location in the string. For example, \1 will succeed if the exact contents of group 1 can be found at the current position, and fails otherwise. Remember that Python’s string literals also use a backslash followed by numbers to allow including arbitrary characters in a string, so be sure to use a raw string when incorporating backreferences in a RE.
+
+For example, the following RE detects doubled words in a string.
+>>>
+
+>>> p = re.compile(r'\b(\w+)\s+\1\b')
+>>> p.search('Paris in the the spring').group()
+'the the'
+
+Backreferences like this aren’t often useful for just searching through a string — there are few text formats which repeat data in this way — but you’ll soon find out that they’re very useful when performing string substitutions.
+======
+
+
+
+raw string
+group
+backreference

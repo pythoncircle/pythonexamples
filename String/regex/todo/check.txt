@@ -1,0 +1,24 @@
+
+finditer()
+Split()
+Compile()
+Subn()
+
+
+Match()
+Search()
+Findall()
+Sub()
+
+
+Expressions using operators and symbols
+Simple character matches
+Special characters
+Different Mail ID patterns
+Data extraction
+Password extraction
+URL extraction
+Vehicle number extraction
+=====
+
+if we say group=matched pattern then is it correct or incorrect?

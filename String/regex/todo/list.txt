@@ -1,0 +1,6 @@
+character class
+In a regex, a set of characters specified in square brackets ([]) makes up a character class. This metacharacter sequence matches any single character that is in the class
+====
+
+any five letter string starting with a and ending with s.
+^a...s$
