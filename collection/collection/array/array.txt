@@ -1,0 +1,25 @@
+
+array is a data structure. 
+data structue is a way to store and organize data.
+array is a collection
+array is a linear data structure
+array is a collection of similar data items
+=======
+
+List
+tuple
+set
+map
+==============
+
+
+Data structure is a paper or topic of Computer science
+List
+stack   LIFO (last in first out)
+queue  FIFO (First in first out)
+tree
+graph
+=================
+
+
+

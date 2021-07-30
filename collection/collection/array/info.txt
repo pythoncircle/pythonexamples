@@ -1,0 +1,3 @@
+array in python is dynamic data structure. 
+The dynamic data structure can grow as well as shrink at run time
+
